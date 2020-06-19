@@ -147,6 +147,66 @@ class stories {
     );
   }
 
+  Widget _imageWidget() {
+    if (_imageUrl != null) {
+      return Container(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(45, 80, 30, 56),
+          child: Container(
+            width: 450.0,
+            height: 450.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(_imageUrl),
+              ),
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        width: 1,
+        height: 1,
+      );
+    }
+  }
+
+  Widget _titleWidget() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(45, 80, 45, 5),
+      child: Container(
+        width: 450,
+        child: Text(
+          '$_title',
+          textScaleFactor: 3,
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _textWidget() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(45, 53, 45, 94),
+      child: Container(
+        width: 450,
+        child: Text(
+          '$_text',
+          textScaleFactor: 2,
+          style: TextStyle(
+            color: Color(0xFF9eb19d),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buttonWidget() {
     if (_buttonUrl != null) {
       return Padding(
@@ -172,65 +232,5 @@ class stories {
     } else {
       return null;
     }
-  }
-
-  Widget _imageWidget() {
-    if (_imageUrl != null) {
-      return Container(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(45, 88, 30, 45),
-          child: Container(
-            width: 450.0,
-            height: 450.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: NetworkImage(_imageUrl),
-              ),
-            ),
-          ),
-        ),
-      );
-    } else {
-      return Container(
-        width: 1,
-        height: 1,
-      );
-    }
-  }
-
-  Widget _textWidget() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(45, 53, 45, 94),
-      child: Container(
-        width: 450,
-        child: Text(
-          '$_text',
-          textScaleFactor: 2,
-          style: TextStyle(
-            color: Color(0xFF9eb19d),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _titleWidget() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(45, 136, 45, 5),
-      child: Container(
-        width: 450,
-        child: Text(
-          '$_title',
-          textScaleFactor: 3,
-          textAlign: TextAlign.left,
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ),
-    );
   }
 }

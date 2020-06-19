@@ -11,18 +11,7 @@ void main() {
   addStories('var3 ');
   addStories('var4 ');
   addStories('var5 ');
-  addStories('var6 ');
-  addStories('var7 ');
-  addStories('var3 ');
-  addStories('var4 ');
-  addStories('var5 ');
-  addStories('var6 ');
-  addStories('var7 ');
-  addStories('var3 ');
-  addStories('var4 ');
-  addStories('var5 ');
-  addStories('var6 ');
-  addStories('var7 ');
+
   statusList.add(closeIcon());
   runApp(MyApp());
 }
