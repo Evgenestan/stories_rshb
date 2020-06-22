@@ -6,6 +6,7 @@ import 'package:storiesrshb/stories.dart';
 import 'GlobalVar.dart';
 
 void main() {
+  // А если их должно быть 30 - 30 бы так же в столбик писал?
   addStories('var1 ');
   addStories('var2 ');
   addStories('var3 ');
@@ -55,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   tag: '$index',
                   child: Padding(
                     padding: EdgeInsets.all(2),
+                    // Ты смешал данные со слоем отображения, причем таким способом, при котором у меня появляются седые волосы (думаю, много у кого они бы появились)
                     child: storiesList[index].Icon(),
                   ),
                 ),

@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'GlobalVar.dart';
 import 'stories.dart';
 
+// Название класса - с большой буквы, в стиле PascalCase
+// StoriesPage
+// Название этого файла в snack_case
+// stories_page.dart
 class storiesPage extends StatefulWidget {
   final int text;
 
@@ -18,11 +22,12 @@ class _storiesPageState extends State<storiesPage> {
     return Container(
       color: Colors.white,
       child: GestureDetector(
-          onTap: onTap,
-          child: Hero(
-            tag: '${widget.text}',
-            child: storiesList[widget.text].Show(),
-          ),
+        onTap: onTap,
+        child: Hero(
+          tag: '${widget.text}',
+          // -_-
+          child: storiesList[widget.text].Show(),
+        ),
       ),
     );
   }
