@@ -158,37 +158,36 @@ class _StoriesPageState extends State<StoriesPage> {
 
   void onPressed() {}
 
-  void onTapDown(TapDownDetails details){
-    if((MediaQuery.of(context).size.width/2)<details.globalPosition.dx){
+  void onTapDown(TapDownDetails details) {
+    if ((MediaQuery.of(context).size.width / 2) < details.globalPosition.dx) {
       goNext();
-    }else{
+    } else {
       goPreviously();
     }
   }
-  void goNext(){
+
+  void goNext() {
     //можно так делать? или нужно всё же сначала делать проверку не выходит ли id за границу?
     try {
       setColor(Color(0xFFcbd6c6));
 
       Navigator.pushReplacementNamed(context, '/stories/id${widget.text + 1}');
-    }catch(e){
+    } catch (e) {
       setColor(Color(0xFFcbd6c6));
       Navigator.pop(context);
     }
   }
-  void goPreviously(){
+
+  void goPreviously() {
     try {
       setColor(Color(0xFFcbd6c6));
 
       Navigator.pushReplacementNamed(context, '/stories/id${widget.text - 1}');
-    }catch(e){
+    } catch (e) {
       setColor(Color(0xFFcbd6c6));
       Navigator.pop(context);
     }
   }
-
-
-
 
   void setColor(Color color0) {
     statusList[widget.text] = Status(color: color0);
