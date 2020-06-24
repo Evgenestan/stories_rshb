@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:storiesrshb/getArray.dart';
-import 'package:storiesrshb/showStories.dart';
+import 'package:storiesrshb/add_stories.dart';
 import 'package:storiesrshb/stories.dart';
+import 'package:storiesrshb/stories_page.dart';
 
-import 'GlobalVar.dart';
+import 'global_var.dart';
 
 void main() {
-  // А если их должно быть 30 - 30 бы так же в столбик писал?
-  addStories('var1 ');
-  addStories('var2 ');
-  addStories('var3 ');
-  addStories('var4 ');
-  addStories('var5 ');
-
-  statusList.add(closeIcon());
+  addStories(howManyStories);
+  generateRoute(howManyStories);
   runApp(MyApp());
+}
+
+void generateRoute(int j) {
+  if (routes != null) {
+    routes.clear();
+  }
+  routes = {
+    '/': (context) => MyHomePage(),
+  };
+  for (var i = 0; i < j; i++) {
+    routes['/stories/id$i'] = ((context) => StoriesPage(
+          text: i,
+        ));
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -22,11 +30,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      initialRoute: '/',
+      routes: routes,
       theme: ThemeData.light(),
-      home: MyHomePage(),
     );
   }
 }
@@ -39,6 +47,55 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    Widget showIcon(Stories stories) {
+      if (stories.imageUrl == null) {
+        return Material(
+          type: MaterialType.transparency,
+          child: FittedBox(
+            child: Container(
+                width: 100.0,
+                height: 100.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient:
+                      LinearGradient(colors: stories.gradient, stops: [0, 1]),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  //color: Colors.black,
+                  child: FittedBox(
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          '${stories.title}',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
+                )),
+          ),
+        );
+      }
+      return Material(
+        type: MaterialType.transparency,
+        child: FittedBox(
+          child: Container(
+            width: 100.0,
+            height: 100.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(stories.imageUrl),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -57,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Padding(
                     padding: EdgeInsets.all(2),
                     // Ты смешал данные со слоем отображения, причем таким способом, при котором у меня появляются седые волосы (думаю, много у кого они бы появились)
-                    child: storiesList[index].Icon(),
+                    child: showIcon(storiesList[index]),
                   ),
                 ),
                 onTap: () => showStories(index),
@@ -70,9 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void showStories(int i) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => storiesPage(text: i)),
-    );
+    Navigator.pushNamed(context, '/stories/id$i');
   }
 }
