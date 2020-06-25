@@ -9,13 +9,16 @@ class Close extends StatelessWidget {
       Navigator.pop(context);
     }
 
-    return Container(
-      height: 30,
-      width: 30,
-      child: FittedBox(
-        child: IconButton(
-          icon: Icon(Icons.close),
-          onPressed: closeStories,
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        height: 30,
+        width: 30,
+        child: FittedBox(
+          child: IconButton(
+            icon: Icon(Icons.close),
+            onPressed: closeStories,
+          ),
         ),
       ),
     );
@@ -68,4 +71,120 @@ class Stories {
     colorLeft0 ??= 0xFF000000;
     gradient = [Color(colorLeft0), Color(colorRight0)];
   }
+}
+
+class StoriesView extends StatelessWidget {
+  final Stories stories;
+
+  const StoriesView({Key key, this.stories}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Widget imageWidget() {
+      return Container(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(45, 80, 30, 56),
+          child: Container(
+            width: 450.0,
+            height: 450.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(stories.imageUrl),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget titleWidget() {
+      return Padding(
+        padding: EdgeInsets.fromLTRB(45, 80, 45, 5),
+        child: Container(
+          width: 450,
+          child: Text(
+            '${stories.title}',
+            textScaleFactor: 3,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget textWidget() {
+      return Padding(
+        padding: EdgeInsets.fromLTRB(45, 53, 45, 94),
+        child: Container(
+          width: 450,
+          child: Text(
+            '${stories.text}',
+            textScaleFactor: 2,
+            style: TextStyle(
+              color: Color(0xFF9eb19d),
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget buttonWidget() {
+      return FittedBox(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(25, 0, 25, 60),
+          child: SizedBox(
+            height: 74.0,
+            width: 500,
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(500.0)),
+              color: Colors.green,
+              child: Text(
+                stories.buttonText,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+                textScaleFactor: 1.5,
+              ),
+              onPressed: onPressed,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Material(
+      type: MaterialType.transparency,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: stories.gradient, stops: [0, 1]),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                  child: FittedBox(
+                alignment: Alignment(0, -1),
+                child: Column(
+                  children: <Widget>[
+                    if (stories.imageUrl != null) imageWidget(),
+                    titleWidget(),
+                    textWidget(),
+                  ],
+                ),
+              )),
+              if (stories.buttonUrl != null) buttonWidget(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void onPressed() {}
 }

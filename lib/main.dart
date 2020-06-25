@@ -113,7 +113,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   tag: '$index',
                   child: Padding(
                     padding: EdgeInsets.all(2),
-                    // Ты смешал данные со слоем отображения, причем таким способом, при котором у меня появляются седые волосы (думаю, много у кого они бы появились)
                     child: showIcon(storiesList[index]),
                   ),
                 ),

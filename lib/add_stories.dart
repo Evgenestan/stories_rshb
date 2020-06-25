@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:storiesrshb/stories.dart';
 
+
 import 'global_var.dart';
 
 void addStories(int j) {
@@ -32,4 +33,10 @@ void addStories(int j) {
     statusList.add(Status(color: Color(0xFFcbd6c6)));
   }
   statusList.add(Close());
+
+  for (var i = 0; i < j; i++) {
+    storiesList1.add(StoriesView(stories: storiesList[i],));
+  }
 }
+
+

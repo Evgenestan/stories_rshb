@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'global_var.dart';
 import 'stories.dart';
@@ -13,130 +15,36 @@ class StoriesPage extends StatefulWidget {
 }
 
 class _StoriesPageState extends State<StoriesPage> {
+  var prevIndex;
+  PageController controller;
+
   @override
   Widget build(BuildContext context) {
-    Widget showStories(Stories stories) {
-      Widget imageWidget() {
-        return Container(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(45, 80, 30, 56),
-            child: Container(
-              width: 450.0,
-              height: 450.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(stories.imageUrl),
-                ),
-              ),
-            ),
-          ),
-        );
-      }
-
-      Widget titleWidget() {
-        return Padding(
-          padding: EdgeInsets.fromLTRB(45, 80, 45, 5),
-          child: Container(
-            width: 450,
-            child: Text(
-              '${stories.title}',
-              textScaleFactor: 3,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        );
-      }
-
-      Widget textWidget() {
-        return Padding(
-          padding: EdgeInsets.fromLTRB(45, 53, 45, 94),
-          child: Container(
-            width: 450,
-            child: Text(
-              '${stories.text}',
-              textScaleFactor: 2,
-              style: TextStyle(
-                color: Color(0xFF9eb19d),
-              ),
-            ),
-          ),
-        );
-      }
-
-      Widget buttonWidget() {
-        return FittedBox(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(25, 0, 25, 60),
-            child: SizedBox(
-              height: 74.0,
-              width: 500,
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(500.0)),
-                color: Colors.green,
-                child: Text(
-                  stories.buttonText,
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                  textScaleFactor: 1.5,
-                ),
-                onPressed: onPressed,
-              ),
-            ),
-          ),
-        );
-      }
-
-      return Material(
-        type: MaterialType.transparency,
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(colors: stories.gradient, stops: [0, 1]),
-          ),
-          child: SafeArea(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.fromLTRB(20, 45, 20, 7),
-                  child: Row(
-                    children: statusList,
-                  ),
-                ),
-                Expanded(
-                    child: FittedBox(
-                  alignment: Alignment(0, -1),
-                  child: Column(
-                    children: <Widget>[
-                      if (stories.imageUrl != null) imageWidget(),
-                      titleWidget(),
-                      textWidget(),
-                    ],
-                  ),
-                )),
-                if (stories.buttonUrl != null) buttonWidget(),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
+    prevIndex ??= widget.text;
 
     return Container(
       color: Colors.white,
       child: GestureDetector(
         //onTap: onTap,
         onTapDown: onTapDown,
-        child: Hero(
-          tag: '${widget.text}',
-          // -_-
-          child: showStories(storiesList[widget.text]),
+        child: Stack(
+          fit: StackFit.loose,
+          children: <Widget>[
+            Hero(
+              tag: '${widget.text}',
+              child: PageView(
+                controller: controller,
+                children: storiesList1,
+                onPageChanged: onPageChanged,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 7),
+              child: Row(
+                children: statusList,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -144,52 +52,49 @@ class _StoriesPageState extends State<StoriesPage> {
 
   @override
   void deactivate() {
-    //SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-    setColor(Color(0xFFcbd6c6));
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    setColor(Color(0xFFcbd6c6), prevIndex);
+    controller.dispose();
     super.deactivate();
   }
 
   @override
   void initState() {
-    //SystemChrome.setEnabledSystemUIOverlays([]);
-    setColor(Color(0xFF07a626));
+    controller = PageController(initialPage: widget.text);
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    setColor(Color(0xFF07a626), widget.text);
     super.initState();
+  }
+
+  void onPageChanged(int index) {
+    setState(() {
+      print(prevIndex);
+      setColor(Color(0xFFcbd6c6), prevIndex);
+      setColor(Color(0xFF07a626), index);
+      prevIndex = index;
+      print(index);
+    });
   }
 
   void onPressed() {}
 
   void onTapDown(TapDownDetails details) {
     if ((MediaQuery.of(context).size.width / 2) < details.globalPosition.dx) {
-      goNext();
+      setState(() {
+        controller.nextPage(
+            duration: Duration(milliseconds: 400),
+            curve: Curves.linearToEaseOut);
+      });
     } else {
-      goPreviously();
+      setState(() {
+        controller.previousPage(
+            duration: Duration(milliseconds: 400),
+            curve: Curves.linearToEaseOut);
+      });
     }
   }
 
-  void goNext() {
-    //можно так делать? или нужно всё же сначала делать проверку не выходит ли id за границу?
-    try {
-      setColor(Color(0xFFcbd6c6));
-
-      Navigator.pushReplacementNamed(context, '/stories/id${widget.text + 1}');
-    } catch (e) {
-      setColor(Color(0xFFcbd6c6));
-      Navigator.pop(context);
-    }
-  }
-
-  void goPreviously() {
-    try {
-      setColor(Color(0xFFcbd6c6));
-
-      Navigator.pushReplacementNamed(context, '/stories/id${widget.text - 1}');
-    } catch (e) {
-      setColor(Color(0xFFcbd6c6));
-      Navigator.pop(context);
-    }
-  }
-
-  void setColor(Color color0) {
-    statusList[widget.text] = Status(color: color0);
+  void setColor(Color color0, int index) {
+    statusList[index] = Status(color: color0);
   }
 }
