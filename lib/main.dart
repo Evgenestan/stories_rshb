@@ -106,8 +106,11 @@ class _MyHomePageState extends State<MyHomePage> {
             scrollDirection: Axis.horizontal,
             //physics: const NeverScrollableScrollPhysics(),
 
+
             itemCount: storiesList.length,
             itemBuilder: (context, index) {
+
+
               return InkWell(
                 child: Hero(
                   tag: '$index',

@@ -16,11 +16,13 @@ class StoriesPage extends StatefulWidget {
 
 class _StoriesPageState extends State<StoriesPage> {
   var prevIndex;
+  var heroTag;
   PageController controller;
 
   @override
   Widget build(BuildContext context) {
     prevIndex ??= widget.text;
+    heroTag ??= widget.text;
 
     return Container(
       color: Colors.white,
@@ -31,7 +33,7 @@ class _StoriesPageState extends State<StoriesPage> {
           fit: StackFit.loose,
           children: <Widget>[
             Hero(
-              tag: '${widget.text}',
+              tag: '$heroTag',
               child: PageView(
                 controller: controller,
                 children: storiesList1,
@@ -72,6 +74,7 @@ class _StoriesPageState extends State<StoriesPage> {
       setColor(Color(0xFFcbd6c6), prevIndex);
       setColor(Color(0xFF07a626), index);
       prevIndex = index;
+      heroTag = index;
       print(index);
     });
   }
